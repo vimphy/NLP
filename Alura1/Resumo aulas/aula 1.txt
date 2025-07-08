@@ -1,0 +1,43 @@
+CONTEXTO:
+
+Nesta atividade, vamos praticar o que aprendemos sobre o uso de vetores bag of words, separação de dados em treino e teste, e a criação de um modelo de regressão logística para classificação de texto.
+
+O objetivo é desenvolver uma função que faça todo esse processo de forma automatizada. A função deverá receber como entrada um conjunto de dados de texto, aplicar o vetor bag of words para transformar o texto em uma representação numérica, dividir os dados em treino e teste, treinar um modelo de regressão logística e avaliar seu desempenho.
+
+Por que estamos fazendo isso? Em outros momentos do projeto, será necessário verificar como a acurácia do modelo será afetada após aplicarmos diferentes etapas de processamento no texto. Portanto, a criação desta função irá facilitar o acompanhamento do desempenho do modelo ao longo do tempo.
+
+Você pode seguir as seguintes etapas:
+
+Crie uma função chamada classificar_texto, que aceite três parâmetros: o nome do DataFrame, o nome da coluna contendo as avaliações de texto e o nome da coluna correspondente aos sentimentos;
+Utilize a classe CountVectorizer para transformar o texto em um vetor bag of words, com um número máximo de 50 features;
+Separe os dados em conjuntos de treino e teste utilizando train_test_split;
+Crie um modelo de regressão logística e ajuste-o aos dados de treino;
+Calcule e retorne a acurácia do modelo para os dados de teste;
+Retorne o valor da acurácia.
+
+CODIGO:
+
+def classificar_texto(texto, coluna_texto, coluna_classificacao):
+    vetorizar = CountVectorizer(lowercase=False, max_features=50)
+    bag_of_words = vetorizar.fit_transform(texto[coluna_texto])
+    X_treino, X_teste, y_treino, y_teste = train_test_split(bag_of_words, texto[coluna_classificacao], random_state=4978)
+    regressao_logistica = LogisticRegression()
+    regressao_logistica.fit(X_treino, y_treino)
+    acuracia = regressao_logistica.score(X_teste, y_teste)
+    return print(f"Acurácia do modelo com '{coluna_texto}': {acuracia * 100:.2f}%")
+
+DETALHAMENTO:
+
+A função possui os seguintes parâmetros:
+texto: DataFrame que contém os dados de entrada. É onde estão os textos que queremos analisar e a coluna que contém as classificações.
+
+coluna_texto: Nome da coluna que contém o texto a ser vetorizado. Este é o conteúdo que será transformado em uma matriz bag of words para treinamento do modelo.
+
+coluna_classificacao: Nome da coluna que contém as classificações ou rótulos que queremos prever. É a variável alvo para o modelo de classificação.
+
+O que a função está fazendo?
+Vetorizando o texto: Utilizamos o CountVectorizer para transformar o texto em uma representação numérica. Utilizamos lowercase=False para manter a capitalização original do texto e max_features=50 para limitar o número de palavras do nosso vocabulário a 50.
+Separando dados de treino e teste: A função train_test_split nos ajuda a dividir os dados em dois conjuntos: um para treino e outro para teste. Utilizar random_state=4978 garante que os resultados sejam reproduzíveis.
+Criando e treinando o modelo de regressão logística
+Calculando a acurácia: Por fim, usamos o método score() do modelo para calcular a acurácia com o conjunto de teste, permitindo verificar o desempenho do modelo. O resultado é multiplicado por 100 para ser exibido em formato percentual.
+Agora, tente rodar a função com seu próprio conjunto de dados e veja como ela pode ajudar a classificar os textos de forma eficiente!
